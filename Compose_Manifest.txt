@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "run_key": "@{outputs('Compose_RunKey')}",
+  "flow_run_id": "@{workflow()['run']['name']}",
+  "flow_name": "@{workflow()['name']}",
+  "internet_message_id": "@{triggerOutputs()?['body/internetMessageId']}",
+  "message_id": "@{triggerOutputs()?['body/id']}",
+  "received_ts_utc": "@{triggerOutputs()?['body/receivedDateTime']}",
+  "subject": "@{triggerOutputs()?['body/subject']}",
+  "from": "@{triggerOutputs()?['body/from']}",
+  "attachment_count": "@{length(body('Filter_RealAttachments'))}",
+  "attachment_names": "@{join(select(body('Filter_RealAttachments'), item()?['name']), '|')}",
+  "captured_ts_utc": "@{utcNow()}"
+}
