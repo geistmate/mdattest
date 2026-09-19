@@ -1,0 +1,31 @@
+Invoice Status Dim =
+ADDCOLUMNS (
+    DATATABLE (
+        "status_code", STRING,
+        "status",      STRING,
+        "sort_order",  INTEGER,
+        "hex",         STRING,
+        {
+            { "TO_ACCRUE",       "To accrue",       1, "#5ac55a" },
+            { "INVOICED",        "Invoiced",        2, "#2b4932" },
+            { "MANUAL_OVERRIDE", "Manual override", 3, "#f2c743" },
+            { "NOT_ELIGIBLE",    "Not eligible",    4, "#ba684c" },
+            { "NOT_IN_SCOPE",    "Not in scope",    5, "#a3a29c" }
+        }
+    ),
+    "swatch",
+        "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><rect width='12' height='12' rx='3' fill='"
+            & SUBSTITUTE ( [hex], "#", "%23" ) & "'/></svg>"
+)
+
+
+Status Rows = COUNTROWS ( 'TDOI Invoice Status' )
+
+Status Label =
+VAR n   = FORMAT ( [Status Rows], "#,0" )
+VAR p   = FORMAT ( DIVIDE ( [Status Rows], CALCULATE ( [Status Rows], ALL ( 'Invoice Status Dim' ) ) ), "0.0%" )
+VAR pad = UNICHAR ( 160 )
+RETURN
+    LEFT ( SELECTEDVALUE ( 'Invoice Status Dim'[status] ) & REPT ( pad, 18 ), 18 )
+        & REPT ( pad, 8 - LEN ( n ) ) & n
+        & REPT ( pad, 8 - LEN ( p ) ) & p
