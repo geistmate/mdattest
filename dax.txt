@@ -31,3 +31,7 @@ RETURN
     LEFT ( SELECTEDVALUE ( 'Invoice Status Dim'[status] ) & REPT ( pad, 18 ), 18 )
         & REPT ( pad, 8 - LEN ( n ) ) & n
         & REPT ( pad, 8 - LEN ( p ) ) & p
+
+
+Clear Text  = IF ( [Active Filters] = 0, "✕ CLEAR ALL", "✕ CLEAR ALL (" & [Active Filters] & ")" )
+Clear Color = IF ( [Active Filters] = 0, "#8A8984", "#1D1D1F" )
