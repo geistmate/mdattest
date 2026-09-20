@@ -226,7 +226,7 @@ RETURN
 
 ----
 front page
-Subst Pace =
+Subst Pace Point =
 VAR CurKey      = YEAR ( TODAY () ) * 12 + MONTH ( TODAY () )
 VAR RowKey      = YEAR ( MAX ( 'Date Table'[Date] ) ) * 12 + MONTH ( MAX ( 'Date Table'[Date] ) )
 VAR DaysElapsed = DAY ( TODAY () )
