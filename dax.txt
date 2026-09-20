@@ -221,3 +221,14 @@ RETURN
         MonthStart = EDATE ( CurStart, -1 ), [Substantiated Lines],
         BLANK ()
     )
+
+
+
+----
+front page
+Subst Pace =
+VAR CurKey      = YEAR ( TODAY () ) * 12 + MONTH ( TODAY () )
+VAR RowKey      = YEAR ( MAX ( 'Date Table'[Date] ) ) * 12 + MONTH ( MAX ( 'Date Table'[Date] ) )
+VAR DaysElapsed = DAY ( TODAY () )
+VAR DaysInMonth = DAY ( EOMONTH ( TODAY (), 0 ) )
+RETURN IF ( RowKey = CurKey, DIVIDE ( [Substantiated Lines] * DaysInMonth, DaysElapsed ) )
