@@ -35,3 +35,10 @@ RETURN
 
 Clear Text  = IF ( [Active Filters] = 0, "✕ CLEAR ALL", "✕ CLEAR ALL (" & [Active Filters] & ")" )
 Clear Color = IF ( [Active Filters] = 0, "#8A8984", "#1D1D1F" )
+
+
+    "swatch",
+        "data:image/svg+xml;utf8,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2714%27%20height=%2714%27%20viewBox=%270%200%2014%2014%27%3E"
+            & "%3Crect%20x=%271%27%20y=%271%27%20width=%2712%27%20height=%2712%27%20rx=%273%27%20fill=%27"
+            & SUBSTITUTE ( [hex], "#", "%23" )
+            & "%27%20stroke=%27white%27%20stroke-width=%271.5%27/%3E%3C/svg%3E"
