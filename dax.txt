@@ -69,6 +69,13 @@ ADDCOLUMNS (
             & SUBSTITUTE ( [hex], "#", "%23" )
             & "%27/%3E%3C/svg%3E"
 )
+
+
+
+Row Summary Label =
+"Total rows: " & FORMAT ( COUNT ( 'TDOI Invoice Status'[SCOPE_FLOC_KEY] ), "#,0" )
+    & "   Ready to invoice: "
+    & FORMAT ( CALCULATE ( COUNT ( 'TDOI Invoice Status'[SCOPE_FLOC_KEY] ), 'TDOI Invoice Status'[ACCRUAL_STATUS] = "TO_ACCRUE" ), "#,0" )
 -------- AGP
 
 AGP Accrual Status Dim =
