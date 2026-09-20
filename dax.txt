@@ -187,3 +187,35 @@ RETURN
         & REPT ( Pad, MAX ( 0, 14 - LEN ( StatusName ) ) )
         & REPT ( Pad, MAX ( 0, 9 - LEN ( NumText ) ) ) & NumText
         & REPT ( Pad, MAX ( 0, 8 - LEN ( PctText ) ) ) & PctText
+
+
+]--frontpage
+
+Substantiated Lines =
+CALCULATE (
+    COUNT ( 'TDOI Invoice Status'[SCOPE_FLOC_KEY] ),
+    'TDOI Invoice Status'[SUBSTANTIATED] = TRUE ()
+)
+
+Subst Closed Months =            -- solid line, Jan–Aug
+VAR CurStart   = DATE ( YEAR ( TODAY () ), MONTH ( TODAY () ), 1 )
+VAR MonthStart = MIN ( 'Date Table'[Date] )
+RETURN IF ( MonthStart < CurStart, [Substantiated Lines] )
+
+Subst MTD =                      -- the single bright green dot
+VAR CurStart   = DATE ( YEAR ( TODAY () ), MONTH ( TODAY () ), 1 )
+VAR MonthStart = MIN ( 'Date Table'[Date] )
+RETURN IF ( MonthStart = CurStart, [Substantiated Lines] )
+
+Subst Pace =                     -- dashed segment: anchors on last closed month, projects this one
+VAR CurStart     = DATE ( YEAR ( TODAY () ), MONTH ( TODAY () ), 1 )
+VAR MonthStart   = MIN ( 'Date Table'[Date] )
+VAR DaysElapsed  = DAY ( TODAY () )
+VAR DaysInMonth  = DAY ( EOMONTH ( TODAY (), 0 ) )
+RETURN
+    SWITCH (
+        TRUE (),
+        MonthStart = CurStart,                  DIVIDE ( [Substantiated Lines] * DaysInMonth, DaysElapsed ),
+        MonthStart = EDATE ( CurStart, -1 ),    [Substantiated Lines],
+        BLANK ()
+    )
