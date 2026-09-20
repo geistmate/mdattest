@@ -126,3 +126,45 @@ RETURN
         & REPT ( Pad, MAX ( 0, 15 - LEN ( StatusName ) ) )
         & REPT ( Pad, MAX ( 0, 9 - LEN ( NumText ) ) ) & NumText
         & REPT ( Pad, MAX ( 0, 8 - LEN ( PctText ) ) ) & PctText
+
+
+
+AGP Review Status Dim =
+ADDCOLUMNS (
+    DATATABLE (
+        "review_code",   STRING,
+        "review_status", STRING,
+        "sort_order",    INTEGER,
+        "hex",           STRING,
+        {
+            { "APPROVED",    "APPROVED",    1, "#5ac55a" },
+            { "NOT_STARTED", "NOT_STARTED", 2, "#f2c743" },
+            { "REJECTED",    "REJECTED",    3, "#ba684c" }
+        }
+    ),
+    "swatch",
+        "data:image/svg+xml;utf8,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2714%27%20height=%2714%27%20viewBox=%270%200%2014%2014%27%3E"
+            & "%3Crect%20x=%271%27%20y=%271%27%20width=%2712%27%20height=%2712%27%20rx=%273%27%20fill=%27"
+            & SUBSTITUTE ( [hex], "#", "%23" )
+            & "%27%20stroke=%27white%27%20stroke-width=%271.5%27/%3E%3C/svg%3E",
+    "swatch_cell",
+        "data:image/svg+xml;utf8,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2712%27%20height=%2712%27%20viewBox=%270%200%2012%2012%27%3E"
+            & "%3Crect%20width=%2712%27%20height=%2712%27%20rx=%273%27%20fill=%27"
+            & SUBSTITUTE ( [hex], "#", "%23" )
+            & "%27/%3E%3C/svg%3E"
+)
+
+AGP Review Rows = COUNTROWS ( 'AGP Invoice Status' )
+
+AGP Review Label =
+VAR StatusName = SELECTEDVALUE ( 'AGP Review Status Dim'[review_status] )
+VAR RowsCount  = [AGP Review Rows]
+VAR Share      = DIVIDE ( RowsCount, CALCULATE ( [AGP Review Rows], ALL ( 'AGP Review Status Dim' ) ) )
+VAR NumText    = FORMAT ( RowsCount, "#,0" )
+VAR PctText    = IF ( Share > 0 && Share < 0.001, "<0.1%", FORMAT ( Share, "0.0%" ) )
+VAR Pad        = UNICHAR ( 160 )
+RETURN
+    StatusName
+        & REPT ( Pad, MAX ( 0, 14 - LEN ( StatusName ) ) )
+        & REPT ( Pad, MAX ( 0, 9 - LEN ( NumText ) ) ) & NumText
+        & REPT ( Pad, MAX ( 0, 8 - LEN ( PctText ) ) ) & PctText
