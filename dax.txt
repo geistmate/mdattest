@@ -112,3 +112,17 @@ RETURN
     REPT ( pad, 15 - LEN ( name ) )
         & REPT ( pad, 9 - LEN ( num ) ) & num
         & REPT ( pad, 8 - LEN ( pct ) ) & pct
+
+--new ver
+AGP Status Label =
+VAR StatusName = SELECTEDVALUE ( 'AGP Accrual Status Dim'[status] )
+VAR RowsCount  = [AGP Status Rows]
+VAR Share      = DIVIDE ( RowsCount, CALCULATE ( [AGP Status Rows], ALL ( 'AGP Accrual Status Dim' ) ) )
+VAR NumText    = FORMAT ( RowsCount, "#,0" )
+VAR PctText    = IF ( Share > 0 && Share < 0.001, "<0.1%", FORMAT ( Share, "0.0%" ) )
+VAR Pad        = UNICHAR ( 160 )
+RETURN
+    StatusName
+        & REPT ( Pad, MAX ( 0, 15 - LEN ( StatusName ) ) )
+        & REPT ( Pad, MAX ( 0, 9 - LEN ( NumText ) ) ) & NumText
+        & REPT ( Pad, MAX ( 0, 8 - LEN ( PctText ) ) ) & PctText
