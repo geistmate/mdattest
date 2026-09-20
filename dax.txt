@@ -69,3 +69,46 @@ ADDCOLUMNS (
             & SUBSTITUTE ( [hex], "#", "%23" )
             & "%27/%3E%3C/svg%3E"
 )
+-------- AGP
+
+AGP Accrual Status Dim =
+ADDCOLUMNS (
+    DATATABLE (
+        "status_code", STRING,
+        "status",      STRING,
+        "sort_order",  INTEGER,
+        "hex",         STRING,
+        {
+            { "TO_ACCRUE",    "To accrue",    1, "#5ac55a" },
+            { "INVOICED",     "Invoiced",     2, "#2b4932" },
+            { "NOT_ELIGIBLE", "Not eligible", 3, "#ba684c" },
+            { "ZERO_MILEAGE", "Zero mileage", 4, "#a3a29c" }
+        }
+    ),
+    "swatch",
+        "data:image/svg+xml;utf8,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2714%27%20height=%2714%27%20viewBox=%270%200%2014%2014%27%3E"
+            & "%3Crect%20x=%271%27%20y=%271%27%20width=%2712%27%20height=%2712%27%20rx=%273%27%20fill=%27"
+            & SUBSTITUTE ( [hex], "#", "%23" )
+            & "%27%20stroke=%27white%27%20stroke-width=%271.5%27/%3E%3C/svg%3E",
+    "swatch_cell",
+        "data:image/svg+xml;utf8,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2712%27%20height=%2712%27%20viewBox=%270%200%2012%2012%27%3E"
+            & "%3Crect%20width=%2712%27%20height=%2712%27%20rx=%273%27%20fill=%27"
+            & SUBSTITUTE ( [hex], "#", "%23" )
+            & "%27/%3E%3C/svg%3E"
+)
+
+
+measures
+AGP Status Rows = COUNTROWS ( 'AGP Invoice Status' )
+
+AGP Status Label =
+VAR name  = SELECTEDVALUE ( 'AGP Accrual Status Dim'[status] )
+VAR rows  = [AGP Status Rows]
+VAR share = DIVIDE ( rows, CALCULATE ( [AGP Status Rows], ALL ( 'AGP Accrual Status Dim' ) ) )
+VAR num   = FORMAT ( rows, "#,0" )
+VAR pct   = IF ( share > 0 && share < 0.001, "<0.1%", FORMAT ( share, "0.0%" ) )
+VAR pad   = UNICHAR ( 160 )
+RETURN
+    REPT ( pad, 15 - LEN ( name ) )
+        & REPT ( pad, 9 - LEN ( num ) ) & num
+        & REPT ( pad, 8 - LEN ( pct ) ) & pct
