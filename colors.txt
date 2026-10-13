@@ -1,0 +1,27 @@
+{
+  "name": "Earthy Google",
+  "dataColors": [
+    "#1E402A",
+    "#F2B705",
+    "#3A78B8",
+    "#BF5B45",
+    "#04D94F",
+    "#1F3A5F",
+    "#2A8C82",
+    "#6B4C7A",
+    "#8DB8D9",
+    "#D98E32",
+    "#9C3B2E",
+    "#A8B89A"
+  ],
+  "good": "#04D94F",
+  "neutral": "#F2B705",
+  "bad": "#BF5B45",
+  "maximum": "#1E402A",
+  "center": "#D9D8D7",
+  "minimum": "#3A78B8",
+  "null": "#D9D8D7",
+  "background": "#FFFFFF",
+  "foreground": "#1E1E1E",
+  "tableAccent": "#1E402A"
+}
